@@ -89,28 +89,6 @@ window.handleRoutes = function(pages) {
   window.parent.postMessage(pagesData, '*');
 };
 
-document.addEventListener('DOMContentLoaded', function() {
-  const elements = document.querySelectorAll('[data-easytag]');
-
-  elements.forEach(element => {
-    element.addEventListener('click', function(event) {
-      event.stopPropagation();
-      const easyTagData = this.getAttribute('data-easytag');
-      console.log({easyTagData});
-      // Отправляем данные наверх
-      window.parent.postMessage({
-        type: 'easyTagClick',
-        timestamp: new Date().toISOString(),
-        data: easyTagData
-      }, '*');
-
-      event.preventDefault();
-    });
-  });
-
-  return true;
-});
-
 // Добавляем этот код в iframe
 document.addEventListener('DOMContentLoaded', function() {
   // Обработчик сообщений
@@ -125,4 +103,68 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('❌ Easy edit mode disabled');
     }
   });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Функция для инициализации обработчиков событий
+  function initEasyTagHandlers() {
+    const elements = document.querySelectorAll('[data-easytag]');
+    
+    elements.forEach(element => {
+      // Удаляем существующие обработчики, чтобы избежать дублирования
+      element.removeEventListener('click', handleEasyTagClick);
+      // Добавляем новый обработчик
+      element.addEventListener('click', handleEasyTagClick);
+    });
+  }
+
+  // Обработчик клика по элементам с data-easytag
+  function handleEasyTagClick(event) {
+    event.stopPropagation();
+    const easyTagData = this.getAttribute('data-easytag');
+    console.log({easyTagData});
+    
+    // Отправляем данные наверх
+    window.parent.postMessage({
+      type: 'easyTagClick',
+      timestamp: new Date().toISOString(),
+      data: easyTagData
+    }, '*');
+
+    event.preventDefault();
+  }
+
+  // Инициализация при загрузке DOM
+  initEasyTagHandlers();
+
+  // Наблюдатель за изменениями DOM для обработки динамического контента
+  const observer = new MutationObserver(function(mutations) {
+    let shouldInit = false;
+    
+    mutations.forEach(function(mutation) {
+      // Проверяем добавленные узлы
+      mutation.addedNodes.forEach(function(node) {
+        if (node.nodeType === 1) { // ELEMENT_NODE
+          // Проверяем сам элемент или его потомков на наличие data-easytag
+          if (node.hasAttribute('data-easytag') || 
+              node.querySelector('[data-easytag]')) {
+            shouldInit = true;
+          }
+        }
+      });
+    });
+    
+    if (shouldInit) {
+      // Небольшая задержка для гарантии, что DOM полностью обновлен
+      setTimeout(initEasyTagHandlers, 10);
+    }
+  });
+
+  // Начинаем наблюдение
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  return true;
 });
