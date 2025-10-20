@@ -120,6 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Обработчик клика по элементам с data-easytag
   function handleEasyTagClick(event) {
+    const editModeElement = document.getElementsByClassName('easy-mode-edit');
+
+    if (editModeElement.length === 0) {
+      // Если режим редактирования не активен, ничего не делаем
+      return;
+    }
+
     event.stopPropagation();
     const easyTagData = this.getAttribute('data-easytag');
     console.log({easyTagData});
