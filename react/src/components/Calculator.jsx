@@ -40,6 +40,17 @@ const Calculator = () => {
     setDisplay((prev) => (prev.includes('.') ? prev : prev + '.'));
   };
 
+  const calculate = (a, b, op) => {
+    if (op === '+') return a + b;
+    if (op === '-') return a - b;
+    if (op === '×' || op === '*') return a * b;
+    if (op === '÷' || op === '/') {
+      if (b === 0) return null;
+      return a / b;
+    }
+    return b;
+  };
+
   const applyOperator = (op) => {
     if (error) return;
     const inputValue = parseFloat(display);
@@ -62,17 +73,6 @@ const Calculator = () => {
 
     setWaitingForSecond(true);
     setOperator(op);
-  };
-
-  const calculate = (a, b, op) => {
-    if (op === '+') return a + b;
-    if (op === '-') return a - b;
-    if (op === '×' || op === '*') return a * b;
-    if (op === '÷' || op === '/') {
-      if (b === 0) return null;
-      return a / b;
-    }
-    return b;
   };
 
   const equals = () => {
@@ -119,8 +119,8 @@ const Calculator = () => {
       }
       if (k === '+') applyOperator('+');
       else if (k === '-') applyOperator('-');
-      else if (k === '*' ) applyOperator('×');
-      else if (k === '/' ) applyOperator('÷');
+      else if (k === '*') applyOperator('×');
+      else if (k === '/') applyOperator('÷');
       else if (k === 'Enter' || k === '=') equals();
       else if (k === 'Backspace') backspace();
       else if (k === 'Escape') clearAll();
@@ -132,32 +132,38 @@ const Calculator = () => {
 
   return (
     <div className="calculator" data-easytag="id001-react/src/components/Calculator.jsx">
-      <div className="calculator__display" role="status" aria-live="polite" data-easytag="id002-react/src/components/Calculator.jsx">
+      <div
+        className="calculator__display"
+        role="status"
+        aria-live="polite"
+        aria-label="Текущее значение"
+        data-easytag="id002-react/src/components/Calculator.jsx"
+      >
         {display}
       </div>
       <div className="calculator__grid" data-easytag="id003-react/src/components/Calculator.jsx">
-        <button className="btn btn--ctrl" onClick={clearAll} aria-label="Сброс" data-easytag="id004-react/src/components/Calculator.jsx">AC</button>
-        <button className="btn btn--ctrl" onClick={backspace} aria-label="Удалить последний символ" data-easytag="id005-react/src/components/Calculator.jsx">⌫</button>
-        <button className="btn btn--op" onClick={() => applyOperator('÷')} aria-label="Деление" data-easytag="id006-react/src/components/Calculator.jsx">÷</button>
-        <button className="btn btn--op" onClick={() => applyOperator('×')} aria-label="Умножение" data-easytag="id007-react/src/components/Calculator.jsx">×</button>
+        <button type="button" className="btn btn--ctrl" onClick={clearAll} aria-label="Сброс" aria-keyshortcuts="Esc" data-easytag="id004-react/src/components/Calculator.jsx">AC</button>
+        <button type="button" className="btn btn--ctrl" onClick={backspace} aria-label="Удалить последний символ" aria-keyshortcuts="Backspace" data-easytag="id005-react/src/components/Calculator.jsx">⌫</button>
+        <button type="button" className="btn btn--op" onClick={() => applyOperator('÷')} aria-label="Деление" aria-pressed={operator === '÷'} aria-keyshortcuts="/" data-easytag="id006-react/src/components/Calculator.jsx">÷</button>
+        <button type="button" className="btn btn--op" onClick={() => applyOperator('×')} aria-label="Умножение" aria-pressed={operator === '×'} aria-keyshortcuts="*" data-easytag="id007-react/src/components/Calculator.jsx">×</button>
 
-        <button className="btn" onClick={() => inputDigit(7)} data-easytag="id008-react/src/components/Calculator.jsx">7</button>
-        <button className="btn" onClick={() => inputDigit(8)} data-easytag="id009-react/src/components/Calculator.jsx">8</button>
-        <button className="btn" onClick={() => inputDigit(9)} data-easytag="id010-react/src/components/Calculator.jsx">9</button>
-        <button className="btn btn--op" onClick={() => applyOperator('-')} aria-label="Вычитание" data-easytag="id011-react/src/components/Calculator.jsx">−</button>
+        <button type="button" className="btn" onClick={() => inputDigit(7)} aria-label="Цифра 7" aria-keyshortcuts="7" data-easytag="id008-react/src/components/Calculator.jsx">7</button>
+        <button type="button" className="btn" onClick={() => inputDigit(8)} aria-label="Цифра 8" aria-keyshortcuts="8" data-easytag="id009-react/src/components/Calculator.jsx">8</button>
+        <button type="button" className="btn" onClick={() => inputDigit(9)} aria-label="Цифра 9" aria-keyshortcuts="9" data-easytag="id010-react/src/components/Calculator.jsx">9</button>
+        <button type="button" className="btn btn--op" onClick={() => applyOperator('-')} aria-label="Вычитание" aria-pressed={operator === '-'} aria-keyshortcuts="-" data-easytag="id011-react/src/components/Calculator.jsx">−</button>
 
-        <button className="btn" onClick={() => inputDigit(4)} data-easytag="id012-react/src/components/Calculator.jsx">4</button>
-        <button className="btn" onClick={() => inputDigit(5)} data-easytag="id013-react/src/components/Calculator.jsx">5</button>
-        <button className="btn" onClick={() => inputDigit(6)} data-easytag="id014-react/src/components/Calculator.jsx">6</button>
-        <button className="btn btn--op" onClick={() => applyOperator('+')} aria-label="Сложение" data-easytag="id015-react/src/components/Calculator.jsx">+</button>
+        <button type="button" className="btn" onClick={() => inputDigit(4)} aria-label="Цифра 4" aria-keyshortcuts="4" data-easytag="id012-react/src/components/Calculator.jsx">4</button>
+        <button type="button" className="btn" onClick={() => inputDigit(5)} aria-label="Цифра 5" aria-keyshortcuts="5" data-easytag="id013-react/src/components/Calculator.jsx">5</button>
+        <button type="button" className="btn" onClick={() => inputDigit(6)} aria-label="Цифра 6" aria-keyshortcuts="6" data-easytag="id014-react/src/components/Calculator.jsx">6</button>
+        <button type="button" className="btn btn--op" onClick={() => applyOperator('+')} aria-label="Сложение" aria-pressed={operator === '+'} aria-keyshortcuts="+" data-easytag="id015-react/src/components/Calculator.jsx">+</button>
 
-        <button className="btn" onClick={() => inputDigit(1)} data-easytag="id016-react/src/components/Calculator.jsx">1</button>
-        <button className="btn" onClick={() => inputDigit(2)} data-easytag="id017-react/src/components/Calculator.jsx">2</button>
-        <button className="btn" onClick={() => inputDigit(3)} data-easytag="id018-react/src/components/Calculator.jsx">3</button>
-        <button className="btn btn--eq" onClick={equals} aria-label="Равно" data-easytag="id019-react/src/components/Calculator.jsx">=</button>
+        <button type="button" className="btn" onClick={() => inputDigit(1)} aria-label="Цифра 1" aria-keyshortcuts="1" data-easytag="id016-react/src/components/Calculator.jsx">1</button>
+        <button type="button" className="btn" onClick={() => inputDigit(2)} aria-label="Цифра 2" aria-keyshortcuts="2" data-easytag="id017-react/src/components/Calculator.jsx">2</button>
+        <button type="button" className="btn" onClick={() => inputDigit(3)} aria-label="Цифра 3" aria-keyshortcuts="3" data-easytag="id018-react/src/components/Calculator.jsx">3</button>
+        <button type="button" className="btn btn--eq" onClick={equals} aria-label="Равно" aria-keyshortcuts="Enter,=" data-easytag="id019-react/src/components/Calculator.jsx">=</button>
 
-        <button className="btn btn--zero" onClick={() => inputDigit(0)} data-easytag="id020-react/src/components/Calculator.jsx">0</button>
-        <button className="btn" onClick={inputDot} data-easytag="id021-react/src/components/Calculator.jsx">.</button>
+        <button type="button" className="btn btn--zero" onClick={() => inputDigit(0)} aria-label="Цифра 0" aria-keyshortcuts="0" data-easytag="id020-react/src/components/Calculator.jsx">0</button>
+        <button type="button" className="btn" onClick={inputDot} aria-label="Десятичная точка" aria-keyshortcuts="." data-easytag="id021-react/src/components/Calculator.jsx">.</button>
       </div>
       {error ? (
         <div className="calculator__error" role="alert" data-easytag="id022-react/src/components/Calculator.jsx">{error}</div>
