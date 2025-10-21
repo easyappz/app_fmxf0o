@@ -148,7 +148,7 @@ const Calculator = () => {
         <button type="button" className="btn btn--op" onClick={() => applyOperator('×')} aria-label="Умножение" aria-pressed={operator === '×'} aria-keyshortcuts="*" data-easytag="id007-react/src/components/Calculator.jsx">×</button>
 
         <button type="button" className="btn" onClick={() => inputDigit(7)} aria-label="Цифра 7" aria-keyshortcuts="7" data-easytag="id008-react/src/components/Calculator.jsx">7</button>
-        <button type="button" className="btn" onClick={() => inputDigit(8)} aria-label="Цифра 8" aria-keyshortcuts="8" data-easytag="id009-react/src/components/Calculator.jsx">8</button>
+        <div aria-hidden="true" className="btn btn--placeholder" style={{ visibility: 'hidden' }} data-easytag="1760914455134-react/src/components/Calculator.jsx"></div>
         <button type="button" className="btn" onClick={() => inputDigit(9)} aria-label="Цифра 9" aria-keyshortcuts="9" data-easytag="id010-react/src/components/Calculator.jsx">9</button>
         <button type="button" className="btn btn--op" onClick={() => applyOperator('-')} aria-label="Вычитание" aria-pressed={operator === '-'} aria-keyshortcuts="-" data-easytag="id011-react/src/components/Calculator.jsx">−</button>
 
